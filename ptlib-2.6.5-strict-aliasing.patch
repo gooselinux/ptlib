@@ -1,0 +1,11 @@
+--- ptlib-2.6.5/src/ptclib/vxml.cxx~	2009-09-21 02:25:24.000000000 +0200
++++ ptlib-2.6.5/src/ptclib/vxml.cxx	2010-06-22 16:14:17.120065676 +0200
+@@ -562,7 +562,7 @@
+ //////////////////////////////////////////////////////////
+ 
+ PVXMLSession::PVXMLSession(PTextToSpeech * _tts, PBoolean autoDelete)
+-  : vxmlChannel((PVXMLChannel * &)readChannel)
++  : vxmlChannel((PVXMLChannel * &) (PChannel * &) readChannel)
+ {
+   vxmlThread       = NULL;
+   threadRunning    = false;

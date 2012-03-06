@@ -1,0 +1,73 @@
+--- ptlib-2.6.5/configure~	2009-09-21 02:25:59.000000000 +0200
++++ ptlib-2.6.5/configure	2010-06-22 16:00:50.857036911 +0200
+@@ -4794,10 +4794,6 @@
+ 
+ if test "x$P_64BIT" != "x" ; then
+ 
+-cat >>confdefs.h <<\_ACEOF
+-#define P_64BIT 1
+-_ACEOF
+-
+   STDCCFLAGS="$STDCCFLAGS -DP_64BIT=1"
+ fi
+ 
+@@ -8505,11 +8501,6 @@
+ echo "${ECHO_T}${EXPANDED_PLUGIN_DIR}" >&6; }
+ 
+ 
+-cat >>confdefs.h <<_ACEOF
+-#define P_DEFAULT_PLUGIN_DIR "${EXPANDED_PLUGIN_DIR}"
+-_ACEOF
+-
+-
+     DEV_PLUGIN_DIR="${PLUGIN_DIR}/devices"
+ 
+     ;;
+--- ptlib-2.6.5/configure.ac~	2009-09-21 02:25:59.000000000 +0200
++++ ptlib-2.6.5/configure.ac	2010-06-22 16:00:25.444065279 +0200
+@@ -388,7 +388,6 @@
+ AC_DEFINE_UNQUOTED($OS_TAG, $OSRELEASE)
+ 
+ if test "x$P_64BIT" != "x" ; then
+-  AC_DEFINE([P_64BIT], [1], [64bit architecture])
+   STDCCFLAGS="$STDCCFLAGS -DP_64BIT=1"
+ fi
+ 
+@@ -925,8 +924,6 @@
+ 
+     AC_MSG_RESULT(${EXPANDED_PLUGIN_DIR})
+ 
+-    AC_DEFINE_UNQUOTED([P_DEFAULT_PLUGIN_DIR], ["${EXPANDED_PLUGIN_DIR}"], [Default plugin directory])
+-
+     DEV_PLUGIN_DIR="${PLUGIN_DIR}/devices"
+     AC_SUBST(DEV_PLUGIN_DIR)
+     ;;
+--- ptlib-2.6.5/include/ptbuildopts.h.in~	2009-09-21 02:25:53.000000000 +0200
++++ ptlib-2.6.5/include/ptbuildopts.h.in	2010-06-22 16:10:27.417923072 +0200
+@@ -62,7 +62,11 @@
+ //
+ 
+ #undef SIZEOF_INT
+-#undef    P_64BIT
++
++#if __WORDSIZE == 64
++#define    P_64BIT 1
++#endif
++
+ #undef    PNO_LONG_DOUBLE
+ 
+ /////////////////////////////////////////////////
+@@ -87,7 +91,12 @@
+ 
+ #undef P_DYNALINK
+ #undef P_PLUGINS
+-#undef P_DEFAULT_PLUGIN_DIR
++
++#ifdef P_64BIT
++#define P_DEFAULT_PLUGIN_DIR "/usr/lib64/" PTLIB_VERSION
++#else
++#define P_DEFAULT_PLUGIN_DIR "/usr/lib/" PTLIB_VERSION
++#endif
+ 
+ /////////////////////////////////////////////////
+ //
